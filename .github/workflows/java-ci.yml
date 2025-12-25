@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout code
+      # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -22,7 +22,7 @@ jobs:
           distribution: temurin
           java-version: '23'
 
-      # Step 3: Compile project
+      # Step 3: Compile all Java files with Maven
       - name: Compile project
         run: mvn clean compile
 
@@ -30,10 +30,8 @@ jobs:
       - name: Run all main classes
         run: |
           echo "Searching for all compiled classes..."
-          for classfile in $(find target/classes -name "*.class"); do
-            # Convert path to Java package format
+          for classfile in $(find target/classes -name "*.class" ! -name "*$*"); do
             classname=$(echo $classfile | sed 's|target/classes/||;s|/|.|g;s|.class$||')
-            # Try to run the class; skip if no main() present
             echo "Running $classname"
-            java $classname || true
+            java -cp target/classes $classname || true
           done
