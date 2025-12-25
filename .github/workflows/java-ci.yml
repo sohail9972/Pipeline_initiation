@@ -1,4 +1,4 @@
-name: Java CI with Maven
+name: Java CI Pipeline
 
 on:
   push:
@@ -11,15 +11,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout code
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Step 2: Set up JDK 23
       - name: Set up JDK 23
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '23'
-          cache: maven
 
-      - name: Build with Maven
+      # Step 3: Compile project
+      - name: Compile project
         run: mvn clean compile
+
+      # Step 4: Run all main classes automatically
+      - name: Run all main classes
+        run: |
+          echo "Searching for all compiled classes..."
+          for classfile in $(find target/classes -name "*.class"); do
+            # Convert path to Java package format
+            classname=$(echo $classfile | sed 's|target/classes/||;s|/|.|g;s|.class$||')
+            # Try to run the class; skip if no main() present
+            echo "Running $classname"
+            java $classname || true
+          done
