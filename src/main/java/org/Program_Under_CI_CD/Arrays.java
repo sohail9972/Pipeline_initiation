@@ -2,6 +2,7 @@ package org.Program_Under_CI_CD;
 
 public class Arrays {
     public static void main(String[] args) {
+        System.out.println("🚀 Main.java executed successfully!");
         int[] arr ={11,13,15,17};
         System.out.println(findMin(arr));
     }
