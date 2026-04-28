@@ -15,6 +15,7 @@ public class LeetcodeNXTGreater {
             while(!st.isEmpty() && st.peek()<=nums2[i]){
                 st.pop();
             }
+//storing the top of the Element
             result[nums2[i]]=st.isEmpty()?-1:st.peek();
             st.push(nums2[i]);
         }
